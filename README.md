@@ -4,17 +4,28 @@
 $ yarn install
 ```
 
+## Configuration
+
+Example of configuration file
+
+```env
+PORT=3000
+
+MONGO_HOST="mongodb://localhost"
+MONGO_PORT=27017
+MONGO_DB="test"
+```
+
+Production env in `.production.env` development env in `.development.env`
+
 ## Running the app
 
 ```bash
-# development
+# production mode
 $ yarn start
 
-# watch mode
+# development mode
 $ yarn start:dev
-
-# production mode
-$ yarn start:prod
 ```
 
 ## Test
