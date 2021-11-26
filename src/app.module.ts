@@ -4,6 +4,7 @@ import { MongooseModule } from "@nestjs/mongoose";
 
 import { RolesModule } from "./roles/roles.module";
 import { UsersModule } from "./users/users.module";
+import { AuthModule } from './auth/auth.module';
 
 const HOST = `${process.env.MONGO_HOST || "mongodb://localhost"}`;
 const PORT = `${process.env.MONGO_PORT || "27017"}`;
@@ -17,6 +18,7 @@ const DB = `${process.env.MONGO_DB || ""}`;
 		MongooseModule.forRoot(`${HOST}:${PORT}/${DB}`),
 		UsersModule,
 		RolesModule,
+		AuthModule,
 	],
 })
 export class AppModule {}
