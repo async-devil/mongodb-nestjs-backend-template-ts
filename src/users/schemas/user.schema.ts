@@ -1,7 +1,8 @@
 import { Prop, Schema, SchemaFactory } from "@nestjs/mongoose";
 import { ApiProperty } from "@nestjs/swagger";
 import { Document, Types } from "mongoose";
-import { Role } from "src/roles/schemas/role.schema";
+
+import { Role } from "../../roles/schemas/role.schema";
 
 @Schema()
 export class User {
@@ -21,9 +22,9 @@ export class User {
 	@Prop({ required: false })
 	banReason: string;
 
-	@ApiProperty({ example: "User", default: "User" })
-	@Prop({ type: Types.ObjectId, ref: "Role", default: "User" })
-	role: Role;
+	@ApiProperty({ example: "User" })
+	@Prop({ type: [{ type: Types.ObjectId }], ref: Role.name })
+	roles: Role[];
 }
 
 export type UserDocument = User & Document;
