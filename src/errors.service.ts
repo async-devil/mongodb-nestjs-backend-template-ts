@@ -13,20 +13,42 @@ export class HttpError {
 export class ErrorsService {
 	private readonly logger = new Logger(ErrorsService.name);
 
-	checkDuplicationError(err: Error) {
+	private debugLog(message: unknown) {
+		if (process.env.NODE_ENV !== "production") return this.logger.debug(message);
+	}
+
+	public checkDuplicationError(
+		err: Error,
+		callback: () => unknown | void = () => this.throwDuplicationError()
+	) {
 		if (err.message.includes("E11000")) {
-			throw new HttpException({ status: 409, message: "Duplicate error" }, HttpStatus.CONFLICT);
+			callback();
 		}
 	}
 
-	throwDefaultError(err: Error) {
+	public checkNotFoundError(
+		err: Error,
+		callback: () => unknown | void = () => this.throwNotFoundError()
+	) {
+		if (err.message.includes("Not found")) {
+			callback();
+		}
+	}
+
+	public throwDefaultError(err: Error) {
+		this.debugLog(err);
+
 		throw new HttpException(
 			{ status: 500, message: err.message },
 			HttpStatus.INTERNAL_SERVER_ERROR
 		);
 	}
 
-	throwNotFoundError() {
+	public throwNotFoundError() {
 		throw new HttpException({ status: 404, message: "Not found" }, HttpStatus.NOT_FOUND);
+	}
+
+	public throwDuplicationError() {
+		throw new HttpException({ status: 409, message: "Duplicate error" }, HttpStatus.CONFLICT);
 	}
 }
