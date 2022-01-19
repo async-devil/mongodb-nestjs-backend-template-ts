@@ -1,4 +1,10 @@
-import { HttpException, HttpStatus, Injectable, Logger } from "@nestjs/common";
+import {
+	HttpException,
+	HttpStatus,
+	Injectable,
+	Logger,
+	UnauthorizedException,
+} from "@nestjs/common";
 import { ApiProperty } from "@nestjs/swagger";
 
 export class HttpError {
@@ -50,5 +56,13 @@ export class ErrorsService {
 
 	public throwDuplicationError() {
 		throw new HttpException({ status: 409, message: "Duplicate error" }, HttpStatus.CONFLICT);
+	}
+
+	public throwInvalidCredentialsError() {
+		throw new UnauthorizedException({ status: 401, message: "Invalid credentials" });
+	}
+
+	public throwUnauthorizedError() {
+		throw new UnauthorizedException({ status: 401, message: "Unauthorized" });
 	}
 }
