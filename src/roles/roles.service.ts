@@ -10,7 +10,7 @@ import { Role, RoleDocument } from "./schemas/role.schema";
 export class RolesService {
 	constructor(
 		@InjectModel(Role.name) private readonly roleModel: Model<RoleDocument>,
-		private readonly errorsServise: ErrorsService
+		private readonly errorsService: ErrorsService
 	) {}
 
 	async createRole(roleDto: CreateRoleDto) {
@@ -20,14 +20,14 @@ export class RolesService {
 
 			return role;
 		} catch (err) {
-			this.errorsServise.checkDuplicationError(err as Error);
-			this.errorsServise.throwDefaultError(err as Error);
+			this.errorsService.checkDuplicationError(err as Error);
+			this.errorsService.throwDefaultError(err as Error);
 		}
 	}
 
 	async getRoleByValue(value: string) {
 		const role = await this.roleModel.findOne({ value: value.toLowerCase() });
-		if (!role) this.errorsServise.throwNotFoundError();
+		if (!role) this.errorsService.throwNotFoundError();
 
 		return role;
 	}
