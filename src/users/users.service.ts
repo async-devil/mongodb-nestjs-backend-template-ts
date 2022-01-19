@@ -13,7 +13,7 @@ export class UsersService {
 	constructor(
 		@InjectModel(User.name) private readonly userModel: Model<UserDocument>,
 		private readonly rolesService: RolesService,
-		private readonly errorsServise: ErrorsService
+		private readonly errorsService: ErrorsService
 	) {}
 
 	async getAllUsers(): Promise<User[]> {
@@ -22,7 +22,14 @@ export class UsersService {
 
 	async getUserById(id: string | ObjectId): Promise<User> {
 		const user = await this.userModel.findById(id.toString()).populate("roles").exec();
-		if (!user) this.errorsServise.throwNotFoundError();
+		if (!user) this.errorsService.throwNotFoundError();
+
+		return user;
+	}
+
+	async getUserByEmail(email: string): Promise<User> {
+		const user = await this.userModel.findOne({ email }).populate("roles").exec();
+		if (!user) this.errorsService.throwNotFoundError();
 
 		return user;
 	}
@@ -38,9 +45,9 @@ export class UsersService {
 
 			return user;
 		} catch (err) {
-			this.errorsServise.checkDuplicationError(err as Error);
-			this.errorsServise.checkNotFoundError(err as Error);
-			this.errorsServise.throwDefaultError(err as Error);
+			this.errorsService.checkDuplicationError(err as Error);
+			this.errorsService.checkNotFoundError(err as Error);
+			this.errorsService.throwDefaultError(err as Error);
 		}
 	}
 
