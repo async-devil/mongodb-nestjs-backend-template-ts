@@ -18,7 +18,7 @@ export class User {
 	@Prop({ default: false })
 	banned: boolean;
 
-	@ApiProperty({ example: "Beeing rude", required: false })
+	@ApiProperty({ example: "Being rude", required: false })
 	@Prop({ required: false })
 	banReason: string;
 
