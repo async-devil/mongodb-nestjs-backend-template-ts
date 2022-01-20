@@ -4,6 +4,8 @@ import { Model, ObjectId } from "mongoose";
 
 import { ErrorsService } from "../errors.service";
 import { RolesService } from "../roles/roles.service";
+import { AddRoleDto } from "./dto/add-role.dto";
+import { BanUserDto } from "./dto/ban-user.dto";
 import { CreateUserDto } from "./dto/create-user.dto";
 import { UpdateUserDto } from "./dto/update-user.dto";
 import { User, UserDocument } from "./schemas/user.schema";
@@ -57,5 +59,27 @@ export class UsersService {
 
 	async updateUser(id: string | ObjectId, userDto: UpdateUserDto): Promise<User> {
 		return this.userModel.findByIdAndUpdate(id.toString(), userDto);
+	}
+
+	async addRole(addRoleDto: AddRoleDto) {
+		const user = await this.userModel.findById(addRoleDto.userId.toString()).exec();
+		const role = await this.rolesService.getRoleByValue(addRoleDto.role);
+
+		if (!user || !role) this.errorsService.throwNotFoundError();
+
+		user.roles.push(role);
+
+		await user.save();
+	}
+
+	async banUser(banUserDto: BanUserDto) {
+		const user = await this.userModel.findById(banUserDto.userId.toString()).exec();
+
+		if (!user) this.errorsService.throwNotFoundError();
+
+		user.banned = true;
+		user.banReason = banUserDto.banReason;
+
+		await user.save();
 	}
 }
