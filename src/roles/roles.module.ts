@@ -1,6 +1,7 @@
-import { Module } from "@nestjs/common";
+import { forwardRef, Module } from "@nestjs/common";
 import { MongooseModule } from "@nestjs/mongoose";
 
+import { AuthModule } from "../auth/auth.module";
 import { ErrorsService } from "../errors.service";
 import { User, UserSchema } from "../users/schemas/user.schema";
 import { RolesController } from "./roles.controller";
@@ -19,6 +20,7 @@ import { Role, RoleSchema } from "./schemas/role.schema";
 				schema: UserSchema,
 			},
 		]),
+		forwardRef(() => AuthModule),
 	],
 	controllers: [RolesController],
 	providers: [RolesService, ErrorsService],
